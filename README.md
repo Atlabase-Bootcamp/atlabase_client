@@ -52,7 +52,7 @@ El frontend corre localmente en tu máquina (para aprovechar la velocidad de Vit
 
 ```bash
 git clone https://github.com/Atlabase-Bootcamp/atlabase_client.git
-cd atlabase-client
+cd atlabase_client
 ```
 
 ### 3. Intalar Dependencias
