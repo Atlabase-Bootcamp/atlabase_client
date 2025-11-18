@@ -51,7 +51,7 @@ El frontend corre localmente en tu máquina (para aprovechar la velocidad de Vit
 ### 2. Clonar el Repositorio
 
 ```bash
-git clone [https://github.com/GerardoVollmer/atlabase-client.git](https://github.com/GerardoVollmer/atlabase-client.git)
+git clone https://github.com/Atlabase-Bootcamp/atlabase_client.git
 cd atlabase-client
 ```
 
