@@ -2,9 +2,7 @@ import api from "@/lib/axios";
 import type { IUser, IApiResponse } from "@/types";
 import type { LoginInput, RegisterInput } from "../schemas/auth.schema";
 
-type LoginResponseData = {
-  token: string;
-};
+type LoginResponseData = string;
 
 export const authService = {
   login: async (credentials: LoginInput) => {
