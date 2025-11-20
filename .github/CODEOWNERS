@@ -1,0 +1,5 @@
+# Este es el archivo CODEOWNERS
+#
+# Asigna automáticamente como revisor a @nestorgariglio
+# para cualquier cambio en cualquier archivo del repositorio.
+* @nestorgariglio
