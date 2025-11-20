@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
+import { createContext, use, useState, useEffect, ReactNode } from "react";
 import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import type { IUser } from "@/types";
@@ -48,7 +42,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = (token: string, userData?: IUser) => {
-    Cookie.set("auth-token", token, { expires: 7 });
+    Cookie.set("auth-token", token, {
+      expires: 7,
+      sameSite: "Strict",
+      secure: process.env.NODE_ENV === "production",
+    });
     if (userData) setUser(userData);
     setIsAuthenticated(true);
     router.refresh();
@@ -72,8 +70,10 @@ function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+export default AuthProvider;
+
 export function useAuth() {
-  const context = useContext(AuthContext);
+  const context = use(AuthContext);
   if (!context) {
     throw new Error("useAuth debe usarse dentro del AuthProvider");
   }
