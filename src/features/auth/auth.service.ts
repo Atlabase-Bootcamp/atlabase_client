@@ -1,12 +1,13 @@
 import api from "@/lib/axios";
-import type { IUser, IApiResponse } from "@/types";
-import type { LoginInput, RegisterInput } from "../schemas/auth.schema";
+import type { ApiResponse } from "@/types";
+import type { User } from "./auth.type";
+import type { LoginInput, RegisterInput } from "./auth.schema";
 
 type LoginResponseData = string;
 
 export const authService = {
   login: async (credentials: LoginInput) => {
-    const { data } = await api.post<IApiResponse<LoginResponseData>>(
+    const { data } = await api.post<ApiResponse<LoginResponseData>>(
       "/auth/login",
       credentials
     );
@@ -14,7 +15,7 @@ export const authService = {
   },
 
   register: async (credentials: RegisterInput) => {
-    const { data } = await api.post<IApiResponse<IUser>>(
+    const { data } = await api.post<ApiResponse<User>>(
       "/auth/register",
       credentials
     );
