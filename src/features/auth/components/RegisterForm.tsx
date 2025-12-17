@@ -10,8 +10,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 // Logic & types
-import { registerSchema, RegisterInput } from "../schemas/auth.schema";
-import { authService } from "../services/auth.service";
+import { registerSchema, RegisterInput } from "../auth.schema";
+import { authService } from "../auth.service";
 
 // UI
 import { Button, Input, Label } from "@/components/ui/index";

@@ -9,8 +9,8 @@ import { Loader2 } from "lucide-react";
 import Image from "next/image";
 
 // Logic & types
-import { loginSchema, LoginInput } from "../schemas/auth.schema";
-import { authService } from "../services/auth.service";
+import { loginSchema, LoginInput } from "../auth.schema";
+import { authService } from "../auth.service";
 import { useAuth } from "@/providers/AuthProvider";
 
 // UI

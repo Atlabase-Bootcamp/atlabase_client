@@ -3,20 +3,20 @@
 import { createContext, use, useState, useEffect, ReactNode } from "react";
 import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
-import type { IUser } from "@/types";
+import type { User } from "@/features/auth/auth.type";
 
 interface AuthContextType {
-  user: IUser | null;
+  user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (token: string, userData?: IUser) => void;
+  login: (token: string, userData?: User) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<IUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoging] = useState(true);
   const router = useRouter();
@@ -41,7 +41,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
     initAuth();
   }, []);
 
-  const login = (token: string, userData?: IUser) => {
+  const login = (token: string, userData?: User) => {
     Cookie.set("auth-token", token, {
       expires: 7,
       sameSite: "Strict",
