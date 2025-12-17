@@ -9,5 +9,21 @@
     "javascriptreact",
     "typescript",
     "typescriptreact"
+  ],
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "ssh": "Disabled",
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "username": "root",
+      "database": "localizar_db",
+      "name": "MySQL"
+    }
   ]
 }
