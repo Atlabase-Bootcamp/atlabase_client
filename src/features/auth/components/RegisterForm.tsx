@@ -14,7 +14,8 @@ import { registerSchema, RegisterInput } from "../auth.schema";
 import { authService } from "../auth.service";
 
 // UI
-import { Button, Input, Label } from "@/components/ui/index";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,

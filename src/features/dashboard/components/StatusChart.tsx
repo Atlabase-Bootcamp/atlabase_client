@@ -34,7 +34,7 @@ function StatusChart({ data }: StatusChartProps) {
     <Card className="col-span-1">
       <CardHeader>Estado de Proyectos</CardHeader>
       <CardContent>
-        <div className="h-[300px] w-full">
+        <div className="h-75 w-full">
           {chartData.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>

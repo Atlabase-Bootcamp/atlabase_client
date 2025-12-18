@@ -1,7 +1,7 @@
 "use client";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Task } from "../project.type";
 

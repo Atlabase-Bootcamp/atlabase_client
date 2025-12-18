@@ -5,7 +5,7 @@ import { useProjectTasks } from "../hooks/useProjectTasks";
 import { Progress } from "@/components/ui/progress";
 import { ProjectStatusBadge } from "./ProjectStatusBadge";
 import { TaskItem } from "./TaskItem";
-import { Button } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft, CalendarDays, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { TaskFormValues } from "../project.schema";

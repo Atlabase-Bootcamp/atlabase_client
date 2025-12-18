@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
 import { useCreateProject } from "../hooks/useCreateProject";
-import { Button } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +30,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
