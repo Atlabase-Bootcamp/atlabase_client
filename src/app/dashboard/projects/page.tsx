@@ -1,7 +1,7 @@
 "use client";
 import { useProjects } from "@/features/projects/hooks/useProjects";
 import { ProjectCard } from "@/features/projects/components/ProjectCard";
-import { Button } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { CreateProjectDialog } from "@/features/projects/components/CreateProjectDialog";
