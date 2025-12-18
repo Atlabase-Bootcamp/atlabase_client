@@ -11,3 +11,4 @@ export const createCustomerSchema = z.object({
 });
 
 export type CreateCustomerInput = z.infer<typeof createCustomerSchema>;
+export interface UpdateCustomerInput extends Partial<CreateCustomerInput> {}

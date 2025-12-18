@@ -1,7 +1,7 @@
 "use client";
 
 import { useCustomers } from "@/features/customers/hooks/useCustomers";
-import { CreateCustomerDialog } from "@/features/customers/components/CreateCustomerDialog";
+import { CustomerFormDialog } from "@/features/customers/components/CustomerFormDialog";
 import {
   Table,
   TableBody,
@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { CustomerActions } from "@/features/customers/components/CustomerActions";
 
 function CustomersPage() {
   const { customers, isLoading, isError } = useCustomers();
@@ -26,7 +27,7 @@ function CustomersPage() {
             Directorio de empresas y contactos.
           </p>
         </div>
-        <CreateCustomerDialog />
+        <CustomerFormDialog />
       </div>
 
       <div className="border rounded-md">
@@ -64,8 +65,7 @@ function CustomersPage() {
                   <TableCell>{customer.email || "-"}</TableCell>
                   <TableCell>{customer.phone_number || "-"}</TableCell>
                   <TableCell className="text-right text-muted-foreground text-sm">
-                    {/* Aquí pondremos botón de editar luego */}
-                    ...
+                    <CustomerActions customer={customer} />
                   </TableCell>
                 </TableRow>
               ))
