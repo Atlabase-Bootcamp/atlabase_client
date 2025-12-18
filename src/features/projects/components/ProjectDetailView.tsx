@@ -1,16 +1,20 @@
 "use client";
 
-import { Progress } from "@/components/ui/progress";
 import { useProject } from "../hooks/useProject";
+import { useProjectTasks } from "../hooks/useProjectTasks";
+import { Progress } from "@/components/ui/progress";
 import { ProjectStatusBadge } from "./ProjectStatusBadge";
 import { TaskItem } from "./TaskItem";
 import { Button } from "@/components/ui";
 import { ArrowLeft, CalendarDays, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { TaskFormValues } from "../project.schema";
+import { TaskForm } from "./TaskForm";
 
 function ProjectDetailView({ projectId }: { projectId: string }) {
   const router = useRouter();
   const { data: project, isLoading, error } = useProject(projectId);
+  const { addTask, toggleTask } = useProjectTasks(projectId);
 
   if (isLoading) return <div>Cargando projecto...</div>;
   if (error) return <div>Occurío un error: {error.message}</div>;
@@ -20,6 +24,14 @@ function ProjectDetailView({ projectId }: { projectId: string }) {
   const completedTasks = project.tasks.filter((t) => t.is_completed).length;
   const progressPercentage =
     totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+
+  const handleToggleTask = (taskId: string, currentStatus: boolean) => {
+    toggleTask.mutate({ taskId, isCompleted: !currentStatus });
+  };
+
+  const handleAddTask = (data: TaskFormValues) => {
+    addTask.mutate(data);
+  };
 
   return (
     <div className="space-y-6">
@@ -75,6 +87,11 @@ function ProjectDetailView({ projectId }: { projectId: string }) {
             Tareas
           </h2>
         </div>
+
+        <div className="bg-muted/30 p-4 rounded-lg border mb-4">
+          <TaskForm onAdd={handleAddTask} isPending={addTask.isPending} />
+        </div>
+
         {project.tasks.length === 0 ? (
           <div className="text-center py-10 border border-dashed rounded-lg text-muted-foreground">
             <p>No hay tareas registradas en este proyecto</p>
@@ -82,7 +99,7 @@ function ProjectDetailView({ projectId }: { projectId: string }) {
         ) : (
           <div className="space-y-2">
             {project.tasks.map((task) => (
-              <TaskItem key={task.id} task={task} />
+              <TaskItem key={task.id} task={task} onToggle={handleToggleTask} />
             ))}
           </div>
         )}
