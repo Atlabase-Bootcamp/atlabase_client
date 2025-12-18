@@ -1,12 +1,12 @@
 "use client";
-import { useGetProjects } from "@/features/projects/useGetProjects";
+import { useProjects } from "@/features/projects/hooks/useProjects";
 import { ProjectCard } from "@/features/projects/components/ProjectCard";
 import { Button } from "@/components/ui";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
 function ProjectPage() {
-  const { data: projects, isLoading, error } = useGetProjects();
+  const { data: projects, isLoading, error } = useProjects();
 
   if (isLoading) return <ProjectsSkeleton />;
   if (error) return <div>Ha ocurrido un error: {error.message}</div>;

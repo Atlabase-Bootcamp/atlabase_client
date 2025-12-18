@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { projectService } from "./project.service";
+import { projectService } from "../project.service";
 
-const useGetProjects = () => {
+const useProjects = () => {
   return useQuery({
     queryKey: ["projects"],
     queryFn: projectService.getAll,
@@ -10,4 +10,4 @@ const useGetProjects = () => {
   });
 };
 
-export { useGetProjects };
+export { useProjects };

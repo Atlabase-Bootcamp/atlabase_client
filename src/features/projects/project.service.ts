@@ -7,4 +7,8 @@ export const projectService = {
     const { data } = await api.get<ApiResponse<Project[]>>("/projects");
     return data.data;
   },
+  getById: async (id: string): Promise<Project> => {
+    const { data } = await api.get<ApiResponse<Project>>(`/projects/${id}`);
+    return data.data;
+  },
 };
