@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 
 function DashboardLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen">
       <aside className="hidden w-64 lg:block border rounded-lg my-2 ml-2 shrink-0">
         <Sidebar />
       </aside>
