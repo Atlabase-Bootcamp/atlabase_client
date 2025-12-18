@@ -1,8 +1,4 @@
-export type ProjectStatus =
-  | "PLANNED"
-  | "IN_PROGRESS"
-  | "COMPLETED"
-  | "CANCELLED";
+import { ProjectStatusType } from "./project.schema";
 
 export interface Customer {
   id: string;
@@ -14,7 +10,7 @@ export interface Project {
   id: string;
   title: string;
   description: string | null;
-  status: ProjectStatus;
+  status: ProjectStatusType;
   start_date: string | null;
   estimated_end_date: string | null;
   created_at: string;

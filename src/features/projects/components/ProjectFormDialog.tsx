@@ -49,6 +49,13 @@ interface ProjectDialogProps {
   onOpenChange?: (open: boolean) => void;
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  PENDING: "Pendiente",
+  IN_PROGRESS: "En Progreso",
+  COMPLETED: "Completado",
+  CANCELLED: "Cancelado",
+};
+
 function ProjectFormDialog({
   projectToEdit,
   open: externalOpen,
@@ -69,6 +76,7 @@ function ProjectFormDialog({
       title: "",
       description: "",
       customerId: "",
+      status: "PENDING",
     },
   });
 
@@ -82,9 +90,15 @@ function ProjectFormDialog({
           date: projectToEdit.estimated_end_date
             ? new Date(projectToEdit.estimated_end_date)
             : undefined,
+          status: projectToEdit.status,
         });
       } else {
-        form.reset({ title: "", description: "", customerId: "" });
+        form.reset({
+          title: "",
+          description: "",
+          customerId: "",
+          status: "PENDING",
+        });
       }
     }
   }, [isOpen, projectToEdit, form]);
@@ -95,6 +109,7 @@ function ProjectFormDialog({
       description: values.description,
       customerId: values.customerId,
       estimated_end_date: values.date ? values.date.toISOString() : undefined,
+      status: values.status,
     };
 
     if (isEditing && projectToEdit) {
@@ -130,7 +145,7 @@ function ProjectFormDialog({
         </DialogTrigger>
       )}
 
-      <DialogContent className="sm:max-w-106.25">
+      <DialogContent className="sm:max-w-150">
         <DialogHeader>
           <DialogTitle>
             {isEditing ? "Editar Proyecto" : "Crear Nuevo Proyecto"}
@@ -156,39 +171,64 @@ function ProjectFormDialog({
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="customerId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cliente</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccionar un cliente" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent position="popper">
-                      {isLoadingCustomers ? (
-                        <div className="p-2 text-sm text-muted-foreground">
-                          Cargando...
-                        </div>
-                      ) : (
-                        customers.map((c) => (
-                          <SelectItem key={c.id} value={c.id}>
-                            {c.name}
-                          </SelectItem>
-                        ))
-                      )}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="customerId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cliente</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Seleccionar..." />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {isLoadingCustomers ? (
+                          <div className="p-2 text-sm">Cargando...</div>
+                        ) : (
+                          customers.map((c) => (
+                            <SelectItem key={c.id} value={c.id}>
+                              {c.name}
+                            </SelectItem>
+                          ))
+                        )}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Estado</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      defaultValue="PENDING"
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Estado" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="PENDING">Pendiente</SelectItem>
+                        <SelectItem value="IN_PROGRESS">En Progreso</SelectItem>
+                        <SelectItem value="COMPLETED">Completado</SelectItem>
+                        <SelectItem value="CANCELLED">Cancelado</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
