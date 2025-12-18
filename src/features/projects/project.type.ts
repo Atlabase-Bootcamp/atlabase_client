@@ -31,3 +31,14 @@ export interface Project {
   customer: Customer;
   tasks: Task[];
 }
+
+export interface CreateTaskInput {
+  title: string;
+  description?: string;
+}
+
+export interface UpdateTaskInput {
+  is_completed?: boolean;
+  title?: string;
+  description?: string;
+}
