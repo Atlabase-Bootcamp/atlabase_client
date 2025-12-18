@@ -12,5 +12,8 @@ export const taskSchema = z.object({
   description: z.string().optional(),
 });
 
+export const udpateProjectSchema = projectSchema.partial();
+
 export type TaskFormValues = z.infer<typeof taskSchema>;
-export type ProjectFormValues = z.infer<typeof projectSchema>;
+export type CreateProjectInput = z.infer<typeof projectSchema>;
+export type UpdateProjectInput = z.infer<typeof udpateProjectSchema>;

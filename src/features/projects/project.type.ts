@@ -24,13 +24,6 @@ export interface Project {
   tasks: Task[];
 }
 
-export interface CreateProjectInput {
-  title: string;
-  description?: string;
-  customerId: string;
-  estimated_end_date?: string;
-}
-
 export interface Task {
   id: string;
   title: string;
