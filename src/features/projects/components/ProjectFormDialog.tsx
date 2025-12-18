@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
-import { useCreateProject } from "../hooks/useCreateProject";
+import { useProjectMutations } from "../hooks/useProjectMutations";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -39,14 +39,31 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { CalendarIcon, Plus, Loader2 } from "lucide-react";
-import { ProjectFormValues, projectSchema } from "../project.schema";
+import { CreateProjectInput, projectSchema } from "../project.schema";
 import { Textarea } from "@/components/ui/textarea";
+import { Project } from "../project.type";
 
-function CreateProjectDialog() {
-  const [open, setOpen] = useState(false);
-  const { createProject, customers, isLoadingCustomers } = useCreateProject();
+interface ProjectDialogProps {
+  projectToEdit?: Project;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
 
-  const form = useForm<ProjectFormValues>({
+function ProjectFormDialog({
+  projectToEdit,
+  open: externalOpen,
+  onOpenChange,
+}: ProjectDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = externalOpen !== undefined;
+  const isOpen = isControlled ? externalOpen : internalOpen;
+  const setOpen = isControlled ? onOpenChange : setInternalOpen;
+
+  const { createProject, updateProject, customers, isLoadingCustomers } =
+    useProjectMutations();
+  const isEditing = !!projectToEdit;
+
+  const form = useForm<CreateProjectInput>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
       title: "",
@@ -55,35 +72,69 @@ function CreateProjectDialog() {
     },
   });
 
-  const onSubmit = (values: ProjectFormValues) => {
-    createProject.mutate(
-      {
-        title: values.title,
-        description: values.description,
-        customerId: values.customerId,
-        estimated_end_date: values.date ? values.date.toISOString() : undefined,
-      },
-      {
+  useEffect(() => {
+    if (isOpen) {
+      if (projectToEdit) {
+        form.reset({
+          title: projectToEdit.title,
+          description: projectToEdit.description || "",
+          customerId: projectToEdit.customer_id,
+          date: projectToEdit.estimated_end_date
+            ? new Date(projectToEdit.estimated_end_date)
+            : undefined,
+        });
+      } else {
+        form.reset({ title: "", description: "", customerId: "" });
+      }
+    }
+  }, [isOpen, projectToEdit, form]);
+
+  const onSubmit = (values: CreateProjectInput) => {
+    const payload = {
+      title: values.title,
+      description: values.description,
+      customerId: values.customerId,
+      estimated_end_date: values.date ? values.date.toISOString() : undefined,
+    };
+
+    if (isEditing && projectToEdit) {
+      updateProject.mutate(
+        { projectId: projectToEdit.id, updates: payload },
+        {
+          onSuccess: () => {
+            if (setOpen) setOpen(false);
+            form.reset();
+          },
+        }
+      );
+    } else {
+      createProject.mutate(payload, {
         onSuccess: () => {
-          setOpen(false);
+          if (setOpen) setOpen(false);
           form.reset();
         },
-      }
-    );
+      });
+    }
   };
 
+  const isLoading = createProject.isPending || updateProject.isPending;
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Nuevo Proyecto
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
+      {!isControlled && (
+        <DialogTrigger asChild>
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            Nuevo Proyecto
+          </Button>
+        </DialogTrigger>
+      )}
 
       <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
-          <DialogTitle>Crear Nuevo Proyecto</DialogTitle>
+          <DialogTitle>
+            {isEditing ? "Editar Proyecto" : "Crear Nuevo Proyecto"}
+          </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -197,12 +248,19 @@ function CreateProjectDialog() {
               )}
             />
 
-            <div>
-              <Button type="submit" disabled={createProject.isPending}>
-                {createProject.isPending && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                Crear Proyecto
+            <div className="flex justify-end pt-4 gap-2">
+              {isControlled && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => setOpen && setOpen(false)}
+                >
+                  Cancelar
+                </Button>
+              )}
+              <Button type="submit" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isEditing ? "Guardar Cambios" : "Crear Proyecto"}
               </Button>
             </div>
           </form>
@@ -212,4 +270,4 @@ function CreateProjectDialog() {
   );
 }
 
-export { CreateProjectDialog };
+export { ProjectFormDialog };
