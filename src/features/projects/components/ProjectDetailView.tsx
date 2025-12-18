@@ -14,7 +14,7 @@ import { TaskForm } from "./TaskForm";
 function ProjectDetailView({ projectId }: { projectId: string }) {
   const router = useRouter();
   const { data: project, isLoading, error } = useProject(projectId);
-  const { addTask, toggleTask } = useProjectTasks(projectId);
+  const { addTask, toggleTask, deleteTask } = useProjectTasks(projectId);
 
   if (isLoading) return <div>Cargando projecto...</div>;
   if (error) return <div>Occurío un error: {error.message}</div>;
@@ -31,6 +31,10 @@ function ProjectDetailView({ projectId }: { projectId: string }) {
 
   const handleAddTask = (data: TaskFormValues) => {
     addTask.mutate(data);
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    deleteTask.mutate(taskId);
   };
 
   return (
@@ -99,7 +103,15 @@ function ProjectDetailView({ projectId }: { projectId: string }) {
         ) : (
           <div className="space-y-2">
             {project.tasks.map((task) => (
-              <TaskItem key={task.id} task={task} onToggle={handleToggleTask} />
+              <TaskItem
+                key={task.id}
+                task={task}
+                onToggle={handleToggleTask}
+                onDelete={handleDeleteTask}
+                isDeleting={
+                  deleteTask.isPending && deleteTask.variables === task.id
+                }
+              />
             ))}
           </div>
         )}

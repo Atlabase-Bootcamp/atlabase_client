@@ -57,6 +57,12 @@ const projectService = {
     );
     return response.data.data;
   },
+  deleteTask: async (projectId: string, taskId: string): Promise<void> => {
+    const response = await api.delete<ApiResponse<void>>(
+      `/projects/${projectId}/tasks/${taskId}`
+    );
+    return response.data.data;
+  },
 };
 
 export { projectService };

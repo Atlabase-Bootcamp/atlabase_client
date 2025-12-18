@@ -37,9 +37,24 @@ const useProjectTasks = (projectId: string) => {
     },
   });
 
+  const deleteTaskMutation = useMutation({
+    mutationFn: (taskId: string) =>
+      projectService.deleteTask(projectId, taskId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["project", projectId],
+      });
+      toast.success("Tarea eliminada");
+    },
+    onError: () => {
+      toast.error("No se pudo eliminar la tarea");
+    },
+  });
+
   return {
     addTask: createTaskMutation,
     toggleTask: updateTaskMutation,
+    deleteTask: deleteTaskMutation,
   };
 };
 
