@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Loader2, Pencil } from "lucide-react";
 import { useCustomers } from "../hooks/useCustomers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,10 +24,25 @@ import {
 } from "@/components/ui/form";
 import { CreateCustomerInput, createCustomerSchema } from "../customer.schema";
 import { Textarea } from "@/components/ui/textarea";
+import { Customer } from "../customer.types";
 
-function CreateCustomerDialog() {
-  const [open, setOpen] = useState(false);
-  const { createCustomer } = useCustomers();
+interface CustomerDialogProps {
+  customerToEdit?: Customer;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+function CustomerFormDialog({
+  customerToEdit,
+  open: externalOpen,
+  onOpenChange,
+}: CustomerDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = externalOpen !== undefined;
+  const isOpen = isControlled ? externalOpen : internalOpen;
+  const setOpen = isControlled ? onOpenChange : setInternalOpen;
+  const { createCustomer, updateCustomer } = useCustomers();
+  const isEditing = !!customerToEdit;
 
   const form = useForm<CreateCustomerInput>({
     resolver: zodResolver(createCustomerSchema),
@@ -39,27 +54,60 @@ function CreateCustomerDialog() {
     },
   });
 
+  useEffect(() => {
+    if (isOpen) {
+      if (customerToEdit) {
+        form.reset({
+          name: customerToEdit.name,
+          email: customerToEdit.email || "",
+          phone_number: customerToEdit.phone_number || "",
+          notes: customerToEdit.notes || "",
+        });
+      } else {
+        form.reset({ name: "", email: "", phone_number: "", notes: "" });
+      }
+    }
+  }, [isOpen, customerToEdit, form]);
+
   const onSubmit = (values: CreateCustomerInput) => {
-    createCustomer.mutate(values, {
-      onSuccess: () => {
-        setOpen(false);
-        form.reset();
-      },
-    });
+    if (isEditing && customerToEdit) {
+      updateCustomer.mutate(
+        { customerId: customerToEdit.id, updates: values },
+        {
+          onSuccess: () => {
+            if (setOpen) setOpen(false);
+            form.reset();
+          },
+        }
+      );
+    } else {
+      createCustomer.mutate(values, {
+        onSuccess: () => {
+          if (setOpen) setOpen(false);
+          form.reset();
+        },
+      });
+    }
   };
 
+  const isLoading = createCustomer.isPending || updateCustomer.isPending;
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="w-4 h-4" />
-          Nuevo Cliente
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
+      {!isControlled && (
+        <DialogTrigger asChild>
+          <Button>
+            <Plus className="w-4 h-4" />
+            Nuevo Cliente
+          </Button>
+        </DialogTrigger>
+      )}
 
       <DialogContent className="sm:max-w-150">
         <DialogHeader>
-          <DialogTitle>Registrar Nuevo Cliente</DialogTitle>
+          <DialogTitle>
+            {isEditing ? "Editar Cliente" : "Registrar Nuevo Cliente"}
+          </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -128,12 +176,19 @@ function CreateCustomerDialog() {
               )}
             />
 
-            <div className="flex justify-end pt-4">
-              <Button type="submit" disabled={createCustomer.isPending}>
-                {createCustomer.isPending && (
-                  <Loader2 className="mr-2 w-4 h-4 animate-spin" />
-                )}
-                Registrar Cliente
+            <div className="flex justify-end pt-4 gap-2">
+              {/* Botón Cancelar opcional */}
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setOpen && setOpen(false)}
+              >
+                Cancelar
+              </Button>
+
+              <Button type="submit" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
+                {isEditing ? "Guardar Cambios" : "Registrar Cliente"}
               </Button>
             </div>
           </form>
@@ -143,4 +198,4 @@ function CreateCustomerDialog() {
   );
 }
 
-export { CreateCustomerDialog };
+export { CustomerFormDialog };
