@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { projectService } from "../project.service";
 import toast from "react-hot-toast";
-import { CreateTaskInput } from "../project.type";
+import { CreateTaskInput, UpdateTaskInput } from "../project.type";
 
 const useProjectTasks = (projectId: string) => {
   const queryClient = useQueryClient();
@@ -18,7 +18,7 @@ const useProjectTasks = (projectId: string) => {
     },
   });
 
-  const updateTaskMutation = useMutation({
+  const toggleTaskMutation = useMutation({
     mutationFn: ({
       taskId,
       isCompleted,
@@ -29,6 +29,17 @@ const useProjectTasks = (projectId: string) => {
       projectService.updateTask(projectId, taskId, {
         is_completed: isCompleted,
       }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["project", projectId] });
+    },
+    onError: () => {
+      toast.error("No se pudo actualizar la tarea");
+    },
+  });
+
+  const updateTaskMutation = useMutation({
+    mutationFn: ({ taskId, data }: { taskId: string; data: UpdateTaskInput }) =>
+      projectService.updateTask(projectId, taskId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
     },
@@ -53,7 +64,8 @@ const useProjectTasks = (projectId: string) => {
 
   return {
     addTask: createTaskMutation,
-    toggleTask: updateTaskMutation,
+    toggleTask: toggleTaskMutation,
+    updateTask: updateTaskMutation,
     deleteTask: deleteTaskMutation,
   };
 };

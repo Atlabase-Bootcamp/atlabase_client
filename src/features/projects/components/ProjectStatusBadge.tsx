@@ -1,11 +1,11 @@
 import { Badge } from "@/components/ui/badge";
-import { ProjectStatus } from "../project.type";
+import { ProjectStatusType } from "../project.schema";
 
 const STATUS_CONFING: Record<
-  ProjectStatus,
+  ProjectStatusType,
   { label: string; className: string }
 > = {
-  PLANNED: {
+  PENDING: {
     label: "Planificado",
     className: "bg-slate-500 hover:bg-slate-600",
   },
@@ -23,8 +23,8 @@ const STATUS_CONFING: Record<
   },
 };
 
-function ProjectStatusBadge({ status }: { status: ProjectStatus }) {
-  const config = STATUS_CONFING[status] || STATUS_CONFING.PLANNED;
+function ProjectStatusBadge({ status }: { status: ProjectStatusType }) {
+  const config = STATUS_CONFING[status] || STATUS_CONFING.PENDING;
   return (
     <Badge className={`${config.className} text-white`}>{config.label}</Badge>
   );
