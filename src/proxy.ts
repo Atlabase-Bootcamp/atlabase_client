@@ -10,7 +10,10 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  if ((pathname === "/login" || pathname === "/register") && token) {
+  if (
+    (pathname === "/login" || pathname === "/register" || pathname === "/") &&
+    token
+  ) {
     return NextResponse.redirect(new URL("/dashboard/", request.url));
   }
 

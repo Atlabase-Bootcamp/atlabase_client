@@ -4,6 +4,7 @@ import { ProjectCard } from "@/features/projects/components/ProjectCard";
 import { Button } from "@/components/ui";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { CreateProjectDialog } from "@/features/projects/components/CreateProjectDialog";
 
 function ProjectPage() {
   const { data: projects, isLoading, error } = useProjects();
@@ -17,10 +18,7 @@ function ProjectPage() {
           <h2 className="text-3xl font-bold tracking-tight">Proyectos</h2>
           <p>Gestiona y monitorea el progreso de tus trabajos.</p>
         </div>
-        <Button>
-          <Plus className="mr-2 w-4 h-4" />
-          Nuevo Proyecto
-        </Button>
+        <CreateProjectDialog />
       </div>
 
       {projects?.length === 0 ? (

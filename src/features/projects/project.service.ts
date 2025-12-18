@@ -1,15 +1,27 @@
 import api from "@/lib/axios";
-import { Project, Task, UpdateTaskInput } from "./project.type";
+import {
+  CreateProjectInput,
+  Project,
+  Task,
+  UpdateTaskInput,
+} from "./project.type";
 import { ApiResponse } from "@/types";
 import { CreateTaskInput } from "./project.type";
 
-export const projectService = {
+const projectService = {
   getAll: async (): Promise<Project[]> => {
     const { data } = await api.get<ApiResponse<Project[]>>("/projects");
     return data.data;
   },
   getById: async (id: string): Promise<Project> => {
     const { data } = await api.get<ApiResponse<Project>>(`/projects/${id}`);
+    return data.data;
+  },
+  create: async (newProject: CreateProjectInput): Promise<Project> => {
+    const { data } = await api.post<ApiResponse<Project>>(
+      "/projects",
+      newProject
+    );
     return data.data;
   },
   createTask: async (
@@ -34,3 +46,5 @@ export const projectService = {
     return data.data;
   },
 };
+
+export { projectService };

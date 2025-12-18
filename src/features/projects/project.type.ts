@@ -10,14 +10,6 @@ export interface Customer {
   email?: string;
 }
 
-export interface Task {
-  id: string;
-  title: string;
-  description: string | null;
-  is_completed: boolean;
-  created_at: string;
-}
-
 export interface Project {
   id: string;
   title: string;
@@ -30,6 +22,21 @@ export interface Project {
   customer_id: string;
   customer: Customer;
   tasks: Task[];
+}
+
+export interface CreateProjectInput {
+  title: string;
+  description?: string;
+  customerId: string;
+  estimated_end_date?: string;
+}
+
+export interface Task {
+  id: string;
+  title: string;
+  description: string | null;
+  is_completed: boolean;
+  created_at: string;
 }
 
 export interface CreateTaskInput {
