@@ -18,9 +18,9 @@ function ProjectCard({ project }: ProjectCardProps) {
       >
         <span className="sr-only">Ver proyecto {project.title}</span>
       </Link>
-      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-        <div className="space-y-1">
-          <CardTitle className="text-base font-semibold leading-tight truncate">
+      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2 gap-2">
+        <div className="space-y-1 min-w-0">
+          <CardTitle className="text-base font-semibold leading-tight truncate pr-1">
             {project.title}
           </CardTitle>
           <div className="flex items-center text-sm text-muted-foreground">
@@ -29,7 +29,7 @@ function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <ProjectStatusBadge status={project.status} />
           <div className="relative z-10">
             <ProjectActions project={project} />
@@ -38,7 +38,7 @@ function ProjectCard({ project }: ProjectCardProps) {
       </CardHeader>
       <CardContent>
         <div className="mt-2 flex items-center text-xs text-muted-foreground">
-          <CalendarDays className="mr-1 h-3 w-3" />
+          <CalendarDays className="mr-1 h-3 w-3 shrink-0" />
           {project.estimated_end_date
             ? `Vence: ${new Date(project.estimated_end_date).toLocaleDateString()}`
             : "Sin fecha límite"}
