@@ -7,13 +7,9 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
-
-// Logic & types
 import { loginSchema, LoginInput } from "../auth.schema";
 import { authService } from "../auth.service";
 import { useAuth } from "@/providers/AuthProvider";
-
-// UI
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -49,8 +45,6 @@ function LoginForm() {
     setIsPending(true);
     try {
       const response = await authService.login(data);
-      console.log(response);
-
       login(response);
       toast.success("¡Bienvenido de nuevo!");
     } catch (error: any) {
@@ -64,18 +58,26 @@ function LoginForm() {
   };
 
   return (
-    <Card className="w-full bg-gray-100 text-black max-w-sm shadow-lg">
+    <Card className="w-full max-w-sm shadow-xl border-border bg-card/80 backdrop-blur-sm dark:bg-card/50 transition-all duration-300">
       <CardHeader>
-        <CardTitle className="flex items-center justify-center text-2xl font-bold text-center hover:animate-pulse hover:scale-110 transition">
-          <Image
-            src="/branding/atlabase_black.svg"
-            alt="atlabase_logo"
-            width="50"
-            height="50"
-          />
-          Atlabase
+        <CardTitle className="flex flex-col items-center justify-center gap-4 text-2xl font-bold text-center">
+          <div className="relative w-[60px] h-[60px] hover:scale-110 transition-transform duration-300">
+            <Image
+              src="/logo-black.svg"
+              alt="atlabase_logo_light"
+              fill
+              className="object-contain dark:hidden"
+            />
+            <Image
+              src="/logo-white.svg"
+              alt="atlabase_logo_dark"
+              fill
+              className="object-contain hidden dark:block"
+            />
+          </div>
+          <span className="text-foreground">Atlabase</span>
         </CardTitle>
-        <CardDescription className="text-center">
+        <CardDescription className="text-center text-muted-foreground">
           Ingresa tus credenciales para acceder
         </CardDescription>
       </CardHeader>
@@ -87,12 +89,13 @@ function LoginForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-foreground">Email</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="tu@email.com"
                       {...field}
                       disabled={isPending}
+                      className="bg-background border-input focus-visible:ring-primary"
                     />
                   </FormControl>
                   <FormMessage />
@@ -104,13 +107,14 @@ function LoginForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contraseña</FormLabel>
+                  <FormLabel className="text-foreground">Contraseña</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder="********"
                       {...field}
                       disabled={isPending}
+                      className="bg-background border-input focus-visible:ring-primary"
                     />
                   </FormControl>
                   <FormMessage />
@@ -119,7 +123,7 @@ function LoginForm() {
             />
             <Button
               type="submit"
-              className="w-full bg-gray-800 text-white cursor-pointer hover:bg-gray-50 hover:text-black"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
               disabled={isPending}
             >
               {isPending ? (
@@ -134,12 +138,12 @@ function LoginForm() {
           </form>
         </Form>
       </CardContent>
-      <CardFooter>
-        <p>
+      <CardFooter className="justify-center">
+        <p className="text-sm text-muted-foreground">
           ¿No tenes cuenta?{" "}
           <Link
             href="/register"
-            className="text-primary font-medium hover:underline"
+            className="text-primary font-medium hover:underline transition-all"
           >
             Regístrate
           </Link>

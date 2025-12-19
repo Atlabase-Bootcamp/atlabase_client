@@ -5,15 +5,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { FormInput, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-
-// Logic & types
 import { registerSchema, RegisterInput } from "../auth.schema";
 import { authService } from "../auth.service";
-
-// UI
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -51,30 +47,40 @@ function RegisterForm() {
   const onSubmit = async (data: RegisterInput) => {
     setIsPending(true);
     try {
-      const response = await authService.register(data);
+      await authService.register(data);
       toast.success("¡Cuenta Creada! Ahora inicie sesión");
       router.push("/login");
     } catch (error: any) {
       const message =
         error.response?.data?.error?.message || "Error al registrarse";
       toast.error(message);
+    } finally {
+      setIsPending(false);
     }
   };
 
   return (
-    <Card className="w-full bg-gray-100 text-black max-w-sm shadow-lg">
+    <Card className="w-full max-w-sm shadow-xl border-border bg-card/80 backdrop-blur-sm dark:bg-card/50 transition-all duration-300">
       <CardHeader>
-        <CardTitle className="flex items-center justify-center text-2xl font-bold text-center hover:animate-pulse hover:scale-110 transition">
-          <Image
-            src="/branding/atlabase_black.svg"
-            alt="atlabase_logo"
-            width="50"
-            height="50"
-          />
-          Atlabase
+        <CardTitle className="flex flex-col items-center justify-center gap-4 text-2xl font-bold text-center">
+          <div className="relative w-[60px] h-[60px] hover:scale-110 transition-transform duration-300">
+            <Image
+              src="/logo-black.svg"
+              alt="atlabase_logo_light"
+              fill
+              className="object-contain dark:hidden"
+            />
+            <Image
+              src="/logo-white.svg"
+              alt="atlabase_logo_dark"
+              fill
+              className="object-contain hidden dark:block"
+            />
+          </div>
+          <span className="text-foreground">Atlabase</span>
         </CardTitle>
-        <CardDescription className="text-center">
-          Ingresa tus credenciales para acceder
+        <CardDescription className="text-center text-muted-foreground">
+          Crea tu cuenta para comenzar
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -86,12 +92,13 @@ function RegisterForm() {
                 name="first_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nombre</FormLabel>
+                    <FormLabel className="text-foreground">Nombre</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Juan"
                         {...field}
                         disabled={isPending}
+                        className="bg-background"
                       />
                     </FormControl>
                     <FormMessage />
@@ -103,12 +110,13 @@ function RegisterForm() {
                 name="last_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Apellido</FormLabel>
+                    <FormLabel className="text-foreground">Apellido</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Pérez"
                         {...field}
                         disabled={isPending}
+                        className="bg-background"
                       />
                     </FormControl>
                     <FormMessage />
@@ -122,12 +130,13 @@ function RegisterForm() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Usuario</FormLabel>
+                  <FormLabel className="text-foreground">Usuario</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="juanperez23"
                       {...field}
                       disabled={isPending}
+                      className="bg-background"
                     />
                   </FormControl>
                   <FormMessage />
@@ -140,13 +149,14 @@ function RegisterForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-foreground">Email</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder="juan@ejemplo.com"
                       {...field}
                       disabled={isPending}
+                      className="bg-background"
                     />
                   </FormControl>
                   <FormMessage />
@@ -159,13 +169,14 @@ function RegisterForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contraseña</FormLabel>
+                  <FormLabel className="text-foreground">Contraseña</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder="********"
                       {...field}
                       disabled={isPending}
+                      className="bg-background"
                     />
                   </FormControl>
                   <FormMessage />
@@ -175,7 +186,7 @@ function RegisterForm() {
 
             <Button
               type="submit"
-              className="w-full bg-gray-800 text-white cursor-pointer hover:bg-gray-50 hover:text-black"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
               disabled={isPending}
             >
               {isPending ? (
@@ -192,7 +203,7 @@ function RegisterForm() {
           ¿Ya tenes una cuenta?{" "}
           <Link
             href="/login"
-            className="text-primary font-medium hover:underline"
+            className="text-primary font-medium hover:underline transition-all"
           >
             Inicia sesión!
           </Link>
