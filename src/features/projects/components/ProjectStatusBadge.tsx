@@ -5,7 +5,7 @@ const STATUS_CONFING: Record<
   ProjectStatusType,
   { label: string; className: string }
 > = {
-  PENDING: {
+  PLANNED: {
     label: "Planificado",
     className: "bg-slate-500 hover:bg-slate-600",
   },
@@ -24,7 +24,7 @@ const STATUS_CONFING: Record<
 };
 
 function ProjectStatusBadge({ status }: { status: ProjectStatusType }) {
-  const config = STATUS_CONFING[status] || STATUS_CONFING.PENDING;
+  const config = STATUS_CONFING[status] || STATUS_CONFING.PLANNED;
   return (
     <Badge className={`${config.className} text-white`}>{config.label}</Badge>
   );

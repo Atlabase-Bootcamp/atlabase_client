@@ -50,7 +50,7 @@ interface ProjectDialogProps {
 }
 
 const STATUS_LABELS: Record<string, string> = {
-  PENDING: "Pendiente",
+  PLANNED: "Planificado",
   IN_PROGRESS: "En Progreso",
   COMPLETED: "Completado",
   CANCELLED: "Cancelado",
@@ -76,7 +76,7 @@ function ProjectFormDialog({
       title: "",
       description: "",
       customerId: "",
-      status: "PENDING",
+      status: "PLANNED",
     },
   });
 
@@ -97,7 +97,7 @@ function ProjectFormDialog({
           title: "",
           description: "",
           customerId: "",
-          status: "PENDING",
+          status: "PLANNED",
         });
       }
     }
@@ -210,7 +210,7 @@ function ProjectFormDialog({
                     <Select
                       onValueChange={field.onChange}
                       value={field.value}
-                      defaultValue="PENDING"
+                      defaultValue="PLANNED"
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -218,7 +218,7 @@ function ProjectFormDialog({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="PENDING">Pendiente</SelectItem>
+                        <SelectItem value="PLANNED">Planificado</SelectItem>
                         <SelectItem value="IN_PROGRESS">En Progreso</SelectItem>
                         <SelectItem value="COMPLETED">Completado</SelectItem>
                         <SelectItem value="CANCELLED">Cancelado</SelectItem>

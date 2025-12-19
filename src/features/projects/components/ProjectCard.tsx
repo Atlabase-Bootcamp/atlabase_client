@@ -20,7 +20,7 @@ function ProjectCard({ project }: ProjectCardProps) {
       </Link>
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
         <div className="space-y-1">
-          <CardTitle className="text-base font-semibold leading-tight">
+          <CardTitle className="text-base font-semibold leading-tight truncate">
             {project.title}
           </CardTitle>
           <div className="flex items-center text-sm text-muted-foreground">

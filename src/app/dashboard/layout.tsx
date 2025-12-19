@@ -37,7 +37,7 @@ function DashboardLayout({ children }: { children: ReactNode }) {
         </header>
 
         <main className="flex-1 overflow-y-auto">
-          <div className="container mx-auto max-w-7xl p-4 lg:p-8 pb-24 lg:pb-8">
+          <div className="container mx-auto max-w-7xl p-4 lg:p-8 pb-28 lg:pb-8">
             {children}
           </div>
         </main>

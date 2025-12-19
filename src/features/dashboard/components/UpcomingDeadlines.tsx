@@ -14,7 +14,7 @@ function UpcomingDeadlines({ projects }: UpcomingDeadlinesProps) {
         <CardTitle>Próximos Vencimientos</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="gap-4">
+        <div className="flex flex-col gap-4">
           {projects.length === 0 ? (
             <p className="text-sm text-muted-foreground">
               !Todo al día¡ No tienes entregas próximas
